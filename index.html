@@ -787,19 +787,19 @@
                     <form id="contactForm">
                         <div class="form-group">
                             <label for="nombre">Nombre Completo</label>
-                            <input type="text" id="nombre" name="nombre" placeholder="Ej: Juan Pérez" required>
+                            <input type="text" id="nombre" name="NOMBRE_CLIENTE" placeholder="Ej: Juan Pérez" required>
                         </div>
                         <div class="form-group">
                             <label for="email">Correo Electrónico</label>
-                            <input type="email" id="email" name="email" placeholder="correo@ejemplo.com" required>
+                            <input type="email" id="email" name="EMAIL_CONTACTO" placeholder="correo@ejemplo.com" required>
                         </div>
                         <div class="form-group">
                             <label for="telefono">WhatsApp de contacto</label>
-                            <input type="tel" id="telefono" name="telefono" placeholder="+56 9 7590 4243" required>
+                            <input type="tel" id="telefono" name="WHATSAPP" placeholder="+56 9 7590 4243" required>
                         </div>
                         <div class="form-group">
                             <label for="mensaje">¿En qué podemos ayudarte?</label>
-                            <textarea id="mensaje" name="mensaje" placeholder="Cuéntanos sobre tu proyecto..."></textarea>
+                            <textarea id="mensaje" name="DETALLES_PROYECTO" placeholder="Cuéntanos sobre tu proyecto..."></textarea>
                         </div>
                         <button type="submit" class="btn-shimmer" style="width: 100%;">Enviar Mensaje</button>
                     </form>
@@ -866,7 +866,7 @@
             </div>
         </div>
         <div class="copyright">
-            © 2024 SGH Centro de Gestión Hipotecaria. Todos los derechos reservados.
+            © 2026 SGH Centro de Gestión Hipotecaria. Todos los derechos reservados.
         </div>
     </footer>
 
@@ -923,14 +923,12 @@
             testiCarousel.style.transform = `translateX(-${testiOffset}px)`;
         }
 
-        // --- LÓGICA AJAX PARA FORMSPREE ---
-        // Guardamos el HTML original del formulario para restaurarlo sin refrescar
+        // --- LÓGICA AJAX PARA GOOGLE APPS SCRIPT ---
         const originalFormHTML = document.getElementById('form-inner-container').innerHTML;
 
         function resetFormUI() {
             const container = document.getElementById('form-inner-container');
             container.innerHTML = originalFormHTML;
-            // Volvemos a asignar el listener al nuevo elemento del DOM
             const newForm = document.getElementById('contactForm');
             newForm.addEventListener('submit', handleFormSubmit);
         }
@@ -945,25 +943,27 @@
             btn.disabled = true;
 
             try {
-                const response = await fetch("https://formspree.io/f/mjgonbqa", {
+                // TU URL PERSONAL DE GOOGLE
+                const scriptURL = "https://script.google.com/macros/s/AKfycbx1MqsqrpDgSD8FGR2o-f-MuXpH8O4dJ4YM5yOCWmzqWhed4hVouO0wgZRbUOeRXqqZ/exec";
+
+                await fetch(scriptURL, {
                     method: "POST",
                     body: formData,
-                    headers: { 'Accept': 'application/json' }
+                    mode: 'no-cors'
                 });
 
-                if (response.ok) {
-                    const formContainer = document.getElementById("form-inner-container");
-                    formContainer.innerHTML = `
-                        <div style="text-align: center; padding: 40px; animation: fadeInUp 0.6s;">
-                            <i class="fa-solid fa-circle-check" style="font-size: 5rem; color: var(--verde-wa); margin-bottom: 20px;"></i>
-                            <h3 style="font-family: 'Lexend'; color: var(--azul-deep); margin-bottom: 15px;">¡Mensaje Enviado!</h3>
-                            <p style="color: var(--text-main);">Gracias por contactar a SGH. Un asesor se comunicará contigo vía WhatsApp a la brevedad.</p>
-                            <button onclick="resetFormUI()" class="btn-shimmer" style="margin-top: 25px; padding: 1rem 2rem;">Enviar otro mensaje</button>
-                        </div>`;
-                } else {
-                    throw new Error();
-                }
+                // Notificamos éxito aunque Google devuelva CORS opaco
+                const formContainer = document.getElementById("form-inner-container");
+                formContainer.innerHTML = `
+                    <div style="text-align: center; padding: 40px; animation: fadeInUp 0.6s;">
+                        <i class="fa-solid fa-circle-check" style="font-size: 5rem; color: var(--verde-wa); margin-bottom: 20px;"></i>
+                        <h3 style="font-family: 'Lexend'; color: var(--azul-deep); margin-bottom: 15px;">¡Mensaje Enviado!</h3>
+                        <p style="color: var(--text-main);">Gracias por contactar a SGH. Hemos recibido tus datos y te contactaremos por WhatsApp a la brevedad.</p>
+                        <button onclick="location.reload()" class="btn-shimmer" style="margin-top: 25px; padding: 1rem 2rem; border-radius: 8px;">Enviar otro mensaje</button>
+                    </div>`;
+
             } catch (error) {
+                console.error('Error!', error.message);
                 alert("Hubo un error al enviar. Por favor, intenta de nuevo o contáctanos por WhatsApp.");
                 btn.innerText = originalText;
                 btn.disabled = false;
