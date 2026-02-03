@@ -784,7 +784,7 @@
                     <div class="contact-method"><i class="fa-brands fa-whatsapp" style="color: var(--verde-wa);"></i><div><strong>WhatsApp Corporativo</strong><br>+56 9 7590 4243</div></div>
                 </div>
                 <div class="form-container">
-                    <form action="https://formspree.io/f/mjgonbqa" method="POST" id="contactForm">
+                    <form id="contactForm">
                         <div class="form-group">
                             <label for="nombre">Nombre Completo</label>
                             <input type="text" id="nombre" name="nombre" placeholder="Ej: Juan Pérez" required>
@@ -817,7 +817,7 @@
             </div>
         </div>
         <div class="map-container reveal">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m12!1m3!1d3329.8327293522774!2d-70.60534242343825!3d-33.42111817339893!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662cf64069f52f1%3A0xb30612c9a1758c5c!2sHolanda%2099%2C%20Providencia%2C%20Regi%C3%B3n%20Metropolitana!5e0!3m2!1ses-419!2scl!4v1709564821211!5m2!1ses-419!2scl" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.8601614742914!2d-70.604620!3d-33.421714!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662cf640f808799%3A0x6730248464605928!2sHolanda%2099%2C%207510011%20Providencia%2C%20Regi%C3%B3n%20Metropolitana!5e0!3m2!1ses-419!2scl!4v1707000000000!5m2!1ses-419!2scl" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </div>
     </section>
 
@@ -923,6 +923,44 @@
             testiCarousel.style.transform = `translateX(-${testiOffset}px)`;
         }
 
+        // --- LÓGICA DE ENVÍO PROFESIONAL AJAX ---
+        const form = document.getElementById("contactForm");
+        async function handleFormSubmit(event) {
+            event.preventDefault(); // Detiene la redirección
+            const btn = event.target.querySelector('button');
+            const originalText = btn.innerText;
+            const formData = new FormData(event.target);
+            
+            btn.innerText = "Enviando...";
+            btn.disabled = true;
+
+            try {
+                const response = await fetch("https://formspree.io/f/mjgonbqa", {
+                    method: "POST",
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (response.ok) {
+                    const formContainer = document.querySelector(".form-container");
+                    formContainer.innerHTML = `
+                        <div style="text-align: center; padding: 40px; animation: fadeInUp 0.6s;">
+                            <i class="fa-solid fa-circle-check" style="font-size: 5rem; color: var(--verde-wa); margin-bottom: 20px;"></i>
+                            <h3 style="font-family: 'Lexend'; color: var(--azul-deep); margin-bottom: 15px;">¡Mensaje Enviado!</h3>
+                            <p style="color: var(--text-main);">Gracias por contactar a SGH. Hemos recibido tus datos y un asesor experto te contactará vía WhatsApp.</p>
+                            <button onclick="location.reload()" class="btn-shimmer" style="margin-top: 25px; padding: 1rem 2rem;">Enviar otro</button>
+                        </div>`;
+                } else {
+                    throw new Error();
+                }
+            } catch (error) {
+                alert("Hubo un error. Intenta de nuevo o contáctanos por WhatsApp.");
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        }
+        form.addEventListener("submit", handleFormSubmit);
+
         // PANEL DE DETALLES OPCIONES
         function toggleDetails(tipo) {
             const panel = document.getElementById('info-panel');
@@ -990,25 +1028,18 @@
             const input = document.getElementById('ai-user-input');
             const box = document.getElementById('chat-box');
             const typing = document.getElementById('typing-indicator');
-            
             if(!input.value.trim()) return;
-            
             const userText = input.value.toLowerCase().trim();
-            
             const userBubble = document.createElement('div');
             userBubble.className = 'chat-bubble user';
             userBubble.innerText = input.value;
             box.insertBefore(userBubble, typing);
-            
             input.value = '';
             box.scrollTop = box.scrollHeight;
-            
             typing.style.display = 'block';
-            
             setTimeout(() => {
                 typing.style.display = 'none';
                 let response = "";
-
                 if (userText.includes("numero") || userText.includes("contacto") || userText.includes("whatsapp") || userText.includes("telefono")) {
                     response = "Nuestro número corporativo es el <b>+56 9 7590 4243</b>. Puedes escribirnos directamente haciendo clic en el icono verde de abajo.";
                 } 
@@ -1040,12 +1071,10 @@
                 else {
                     response = "Esa es una excelente consulta. Para darte la información técnica exacta, por favor <b>haz clic en el botón de WhatsApp</b> para hablar con una ejecutiva de SGH. ¡Te responderemos de inmediato!";
                 }
-
                 const aiBubble = document.createElement('div');
                 aiBubble.className = 'chat-bubble ai';
                 aiBubble.innerHTML = response;
                 box.insertBefore(aiBubble, typing);
-                
                 box.scrollTop = box.scrollHeight;
             }, 1000); 
         }
