@@ -426,6 +426,28 @@
 
         @keyframes fadeInRight { from { opacity: 0; transform: translateY(-50%) translateX(20px); } to { opacity: 1; transform: translateY(-50%) translateX(0); } }
 
+        /* ===== MODALES LEGALES ===== */
+        .legal-modal {
+            display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.9);
+            z-index: 11000; padding: 50px; overflow-y: auto; align-items: center; justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+        .legal-modal.active { display: flex; }
+        .legal-content {
+            background: var(--white); width: 100%; max-width: 900px; padding: 60px;
+            border-radius: 40px; position: relative; max-height: 80vh; overflow-y: auto;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+        }
+        .legal-content h2 { font-family: 'Lexend'; font-size: 2rem; margin-bottom: 30px; color: var(--azul-deep); }
+        .legal-content h3 { font-family: 'Lexend'; font-size: 1.3rem; margin: 25px 0 15px; color: var(--azul-accent); }
+        .legal-content p, .legal-content li { font-size: 1rem; color: var(--text-main); margin-bottom: 15px; line-height: 1.8; }
+        .legal-content ul { list-style: disc; padding-left: 20px; margin-bottom: 20px; }
+        .close-legal {
+            position: absolute; top: 30px; right: 40px; font-size: 1.5rem; color: var(--text-main);
+            cursor: pointer; transition: 0.3s;
+        }
+        .close-legal:hover { color: var(--rojo-soft); transform: rotate(90deg); }
+
         /* ===== FOOTER ===== */
         footer { 
             background: #0b1121; 
@@ -450,7 +472,7 @@
         .footer-col ul { list-style: none; padding: 0; }
         .footer-col ul li { margin-bottom: 15px; display: flex; align-items: center; color: #94a3b8; font-size: 0.95rem; transition: 0.3s; }
         .footer-col ul li::before { content: ""; width: 7px; height: 7px; background-color: #ffffff; border-radius: 50%; margin-right: 15px; flex-shrink: 0; }
-        .footer-col ul li a { color: inherit; text-decoration: none; transition: 0.3s; }
+        .footer-col ul li a { color: inherit; text-decoration: none; transition: 0.3s; cursor: pointer; }
         .footer-col ul li a:hover { color: #ffffff; transform: translateX(5px); }
         .footer-contact-info { color: #94a3b8; font-size: 0.95rem; line-height: 1.9; }
         .copyright { margin-top: 80px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); text-align: center; font-size: 0.85rem; color: #475569; }
@@ -467,6 +489,7 @@
             .panel-img { height: 300px; }
             .testi-card-video { flex: 0 0 100%; height: 350px; }
             .testi-card-text { flex: 0 0 100%; }
+            .legal-content { padding: 40px; }
         }
         @media (max-width: 768px) {
             .dif-grid, .atencion-grid, .steps-container { grid-template-columns: 1fr; }
@@ -486,6 +509,43 @@
             <div class="loader-logo-container"><img src="logo.png" alt="SGH Logo"></div>
             <div class="loader-text">Centro de Gestión Hipotecaria</div>
             <div class="loading-bar-container"><div class="loading-bar"></div></div>
+        </div>
+    </div>
+
+    <div id="modal-terminos" class="legal-modal">
+        <div class="legal-content">
+            <i class="fa-solid fa-xmark close-legal" onclick="toggleLegal('modal-terminos')"></i>
+            <h2>Términos y Condiciones de Uso</h2>
+            <p>Bienvenido al sitio web de <strong>SGH - Centro de Gestión Hipotecaria</strong>. Al acceder y utilizar este sitio, usted acepta cumplir con los siguientes términos:</p>
+            <h3>1. Objeto del Servicio</h3>
+            <p>SGH actúa como intermediario y asesor en la gestión de créditos hipotecarios y leasing habitacional ante diversas entidades financieras en Chile. No somos una entidad bancaria propia.</p>
+            <h3>2. Veracidad de la Información</h3>
+            <p>El usuario garantiza que toda la información proporcionada a través de nuestros formularios es real, exacta y completa. SGH no se responsabiliza por rechazos de crédito derivados de información errónea.</p>
+            <h3>3. Evaluación de Crédito</h3>
+            <p>La aprobación final de cualquier producto financiero (Leasing o Mutuo) depende exclusivamente de las instituciones bancarias y financieras asociadas, de acuerdo con sus propias políticas de riesgo.</p>
+            <h3>4. Propiedad Intelectual</h3>
+            <p>Todo el contenido de este sitio (logos, textos, imágenes y videos) es propiedad de SGH y está protegido por las leyes de propiedad intelectual de Chile.</p>
+        </div>
+    </div>
+
+    <div id="modal-privacidad" class="legal-modal">
+        <div class="legal-content">
+            <i class="fa-solid fa-xmark close-legal" onclick="toggleLegal('modal-privacidad')"></i>
+            <h2>Política de Privacidad</h2>
+            <p>En <strong>SGH</strong>, valoramos su privacidad y protegemos sus datos de acuerdo con la Ley N° 19.628 sobre Protección de la Vida Privada en Chile.</p>
+            <h3>1. Recopilación de Datos</h3>
+            <p>Recopilamos información personal (nombre, email, teléfono y renta) únicamente para evaluar su perfil hipotecario y contactarle directamente vía WhatsApp o correo electrónico.</p>
+            <h3>2. Uso de la Información</h3>
+            <p>Sus datos personales serán utilizados exclusivamente para:</p>
+            <ul>
+                <li>Gestión de pre-aprobación ante entidades financieras.</li>
+                <li>Asesoría personalizada sobre subsidios y leasing.</li>
+                <li>Comunicación directa de avances en su proceso de compra.</li>
+            </ul>
+            <h3>3. Seguridad</h3>
+            <p>Implementamos medidas de seguridad técnicas para evitar la pérdida, mal uso o alteración de sus datos. No vendemos ni compartimos sus datos con terceros con fines comerciales ajenos a su gestión hipotecaria.</p>
+            <h3>4. Derechos del Titular</h3>
+            <p>Usted puede solicitar en cualquier momento la rectificación o eliminación de sus datos enviando un correo a <strong>contacto@sgh.cl</strong>.</p>
         </div>
     </div>
 
@@ -560,7 +620,7 @@
         <h2 class="section-title reveal">Casos de Éxito</h2>
         <div class="testimonials-wrapper reveal">
             <div class="testi-carousel-window">
-                <button class="testi-arrow testi-prev" onclick="moveTesti(-1)"><i class="fas fa-chevron-left"></i></button>
+                <button class="nav-arrow testi-arrow testi-prev" onclick="moveTesti(-1)"><i class="fas fa-chevron-left"></i></button>
                 <div class="testi-grid" id="testi-carousel">
                     
                     <div class="testi-card-video" onclick="playTestimonial(this)">
@@ -580,7 +640,7 @@
                     </div>
 
                 </div>
-                <button class="testi-arrow testi-next" onclick="moveTesti(1)"><i class="fas fa-chevron-right"></i></button>
+                <button class="nav-arrow testi-arrow testi-next" onclick="moveTesti(1)"><i class="fas fa-chevron-right"></i></button>
             </div>
         </div>
     </section>
@@ -706,8 +766,8 @@
             <div class="footer-col">
                 <h4>Legal</h4>
                 <ul>
-                    <li><a href="#">Términos y Condiciones</a></li>
-                    <li><a href="#">Privacidad</a></li>
+                    <li><a onclick="toggleLegal('modal-terminos')">Términos y Condiciones</a></li>
+                    <li><a onclick="toggleLegal('modal-privacidad')">Privacidad</a></li>
                 </ul>
             </div>
             <div class="footer-col">
@@ -791,7 +851,7 @@
             }, 1500);
         }
 
-        // PANEL DE DETALLES SERVICIOS (INFORMACIÓN COMPLETA RESTAURADA Y ACTUALIZADA)
+        // PANEL DE DETALLES SERVICIOS
         function toggleDetails(tipo) {
             const panel = document.getElementById('info-panel');
             const data = {
@@ -840,6 +900,13 @@
                 panel.classList.add('open');
                 panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 50);
+        }
+
+        // LÓGICA MODALES LEGALES
+        function toggleLegal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.toggle('active');
+            document.body.style.overflow = modal.classList.contains('active') ? 'hidden' : 'auto';
         }
 
         // LÓGICA CHAT IA
