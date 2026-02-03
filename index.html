@@ -783,7 +783,7 @@
                     <div class="contact-method"><i class="fa-solid fa-clock"></i><div><strong>Horario</strong><br>Lun - Vie: 09:00 - 18:30</div></div>
                     <div class="contact-method"><i class="fa-brands fa-whatsapp" style="color: var(--verde-wa);"></i><div><strong>WhatsApp Corporativo</strong><br>+56 9 7590 4243</div></div>
                 </div>
-                <div class="form-container">
+                <div class="form-container" id="form-inner-container">
                     <form id="contactForm">
                         <div class="form-group">
                             <label for="nombre">Nombre Completo</label>
@@ -817,7 +817,7 @@
             </div>
         </div>
         <div class="map-container reveal">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.98661649233!2d-70.60627712431!3d-33.42363067339934!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662cf648602b9e7%3A0x633512967f082e6e!2sHolanda%2099%2C%20Providencia%2C%20Regi%C3%B3n%20Metropolitana!5e0!3m2!1ses!2scl!4v1707000000000!5m2!1ses!2scl" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.865391307525!2d-70.6067866!3d-33.4215286!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662cf64893708e5%3A0x63a35d72f9b8849!2sHolanda%20099%2C%20Providencia%2C%20Regi%C3%B3n%20Metropolitana!5e0!3m2!1ses!2scl!4v1707200000000!5m2!1ses!2scl" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </div>
     </section>
 
@@ -923,14 +923,23 @@
             testiCarousel.style.transform = `translateX(-${testiOffset}px)`;
         }
 
-        // --- NUEVA LÓGICA AJAX PARA FORMSPREE ---
-        // Esto envía los datos sin salir de la página
-        const contactForm = document.getElementById('contactForm');
-        contactForm.addEventListener('submit', async function(e) {
+        // --- LÓGICA AJAX PARA FORMSPREE ---
+        // Guardamos el HTML original del formulario para restaurarlo sin refrescar
+        const originalFormHTML = document.getElementById('form-inner-container').innerHTML;
+
+        function resetFormUI() {
+            const container = document.getElementById('form-inner-container');
+            container.innerHTML = originalFormHTML;
+            // Volvemos a asignar el listener al nuevo elemento del DOM
+            const newForm = document.getElementById('contactForm');
+            newForm.addEventListener('submit', handleFormSubmit);
+        }
+
+        async function handleFormSubmit(e) {
             e.preventDefault();
-            const btn = this.querySelector('button');
+            const btn = e.target.querySelector('button');
             const originalText = btn.innerText;
-            const formData = new FormData(this);
+            const formData = new FormData(e.target);
             
             btn.innerText = "Enviando...";
             btn.disabled = true;
@@ -943,23 +952,25 @@
                 });
 
                 if (response.ok) {
-                    const formContainer = document.querySelector(".form-container");
+                    const formContainer = document.getElementById("form-inner-container");
                     formContainer.innerHTML = `
                         <div style="text-align: center; padding: 40px; animation: fadeInUp 0.6s;">
                             <i class="fa-solid fa-circle-check" style="font-size: 5rem; color: var(--verde-wa); margin-bottom: 20px;"></i>
                             <h3 style="font-family: 'Lexend'; color: var(--azul-deep); margin-bottom: 15px;">¡Mensaje Enviado!</h3>
                             <p style="color: var(--text-main);">Gracias por contactar a SGH. Un asesor se comunicará contigo vía WhatsApp a la brevedad.</p>
-                            <button onclick="location.reload()" class="btn-shimmer" style="margin-top: 25px; padding: 1rem 2rem;">Volver</button>
+                            <button onclick="resetFormUI()" class="btn-shimmer" style="margin-top: 25px; padding: 1rem 2rem;">Enviar otro mensaje</button>
                         </div>`;
                 } else {
                     throw new Error();
                 }
             } catch (error) {
-                alert("Hubo un error. Intenta de nuevo o contáctanos por WhatsApp.");
+                alert("Hubo un error al enviar. Por favor, intenta de nuevo o contáctanos por WhatsApp.");
                 btn.innerText = originalText;
                 btn.disabled = false;
             }
-        });
+        }
+
+        document.getElementById('contactForm').addEventListener('submit', handleFormSubmit);
 
         // PANEL DE DETALLES OPCIONES
         function toggleDetails(tipo) {
