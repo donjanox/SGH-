@@ -784,11 +784,23 @@
                     <div class="contact-method"><i class="fa-brands fa-whatsapp" style="color: var(--verde-wa);"></i><div><strong>WhatsApp Corporativo</strong><br>+56 9 7590 4243</div></div>
                 </div>
                 <div class="form-container">
-                    <form id="contactForm" onsubmit="handleFormSubmit(event)">
-                        <div class="form-group"><label for="nombre">Nombre Completo</label><input type="text" id="nombre" placeholder="Ej: Juan Pérez" required></div>
-                        <div class="form-group"><label for="email">Correo Electrónico</label><input type="email" id="email" placeholder="correo@ejemplo.com" required></div>
-                        <div class="form-group"><label for="telefono">WhatsApp de contacto</label><input type="tel" id="telefono" placeholder="+56 9 7590 4243" required></div>
-                        <div class="form-group"><label for="mensaje">¿En qué podemos ayudarte?</label><textarea id="mensaje" placeholder="Cuéntanos sobre tu proyecto..."></textarea></div>
+                    <form action="https://formspree.io/f/mjgonbqa" method="POST" id="contactForm">
+                        <div class="form-group">
+                            <label for="nombre">Nombre Completo</label>
+                            <input type="text" id="nombre" name="nombre" placeholder="Ej: Juan Pérez" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Correo Electrónico</label>
+                            <input type="email" id="email" name="email" placeholder="correo@ejemplo.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telefono">WhatsApp de contacto</label>
+                            <input type="tel" id="telefono" name="telefono" placeholder="+56 9 7590 4243" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="mensaje">¿En qué podemos ayudarte?</label>
+                            <textarea id="mensaje" name="mensaje" placeholder="Cuéntanos sobre tu proyecto..."></textarea>
+                        </div>
                         <button type="submit" class="btn-shimmer" style="width: 100%;">Enviar Mensaje</button>
                     </form>
                 </div>
@@ -805,7 +817,7 @@
             </div>
         </div>
         <div class="map-container reveal">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.800000000000!2d-70.6060000!3d-33.4210000!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662cf6a00000000%3A0x0!2zMTPCsDI1JzE1LjYiUyA3MMKwMzYnMjEuNiJX!5e0!3m2!1ses-419!2scl!4v1700000000000" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m12!1m3!1d3329.8327293522774!2d-70.60534242343825!3d-33.42111817339893!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662cf64069f52f1%3A0xb30612c9a1758c5c!2sHolanda%2099%2C%20Providencia%2C%20Regi%C3%B3n%20Metropolitana!5e0!3m2!1ses-419!2scl!4v1709564821211!5m2!1ses-419!2scl" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </div>
     </section>
 
@@ -911,21 +923,6 @@
             testiCarousel.style.transform = `translateX(-${testiOffset}px)`;
         }
 
-        // ENVÍO DE FORMULARIO
-        function handleFormSubmit(e) {
-            e.preventDefault();
-            const btn = e.target.querySelector('button');
-            const originalText = btn.innerText;
-            btn.innerText = "Enviando...";
-            btn.disabled = true;
-            setTimeout(() => {
-                alert("¡Gracias por contactar a SGH! Hemos recibido tu mensaje.");
-                e.target.reset();
-                btn.innerText = originalText;
-                btn.disabled = false;
-            }, 1500);
-        }
-
         // PANEL DE DETALLES OPCIONES
         function toggleDetails(tipo) {
             const panel = document.getElementById('info-panel');
@@ -998,7 +995,6 @@
             
             const userText = input.value.toLowerCase().trim();
             
-            // 1. Mostrar mensaje del usuario
             const userBubble = document.createElement('div');
             userBubble.className = 'chat-bubble user';
             userBubble.innerText = input.value;
@@ -1007,14 +1003,12 @@
             input.value = '';
             box.scrollTop = box.scrollHeight;
             
-            // 2. Mostrar "IA está pensando..."
             typing.style.display = 'block';
             
             setTimeout(() => {
                 typing.style.display = 'none';
                 let response = "";
 
-                // LÓGICA DE RESPUESTAS PROFESIONAL
                 if (userText.includes("numero") || userText.includes("contacto") || userText.includes("whatsapp") || userText.includes("telefono")) {
                     response = "Nuestro número corporativo es el <b>+56 9 7590 4243</b>. Puedes escribirnos directamente haciendo clic en el icono verde de abajo.";
                 } 
