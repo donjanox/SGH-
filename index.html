@@ -817,7 +817,7 @@
             </div>
         </div>
         <div class="map-container reveal">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.8601614742914!2d-70.604620!3d-33.421714!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662cf640f808799%3A0x6730248464605928!2sHolanda%2099%2C%207510011%20Providencia%2C%20Regi%C3%B3n%20Metropolitana!5e0!3m2!1ses-419!2scl!4v1707000000000!5m2!1ses-419!2scl" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.98661649233!2d-70.60627712431!3d-33.42363067339934!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662cf648602b9e7%3A0x633512967f082e6e!2sHolanda%2099%2C%20Providencia%2C%20Regi%C3%B3n%20Metropolitana!5e0!3m2!1ses!2scl!4v1707000000000!5m2!1ses!2scl" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </div>
     </section>
 
@@ -923,13 +923,14 @@
             testiCarousel.style.transform = `translateX(-${testiOffset}px)`;
         }
 
-        // --- LÓGICA DE ENVÍO PROFESIONAL AJAX ---
-        const form = document.getElementById("contactForm");
-        async function handleFormSubmit(event) {
-            event.preventDefault(); // Detiene la redirección
-            const btn = event.target.querySelector('button');
+        // --- NUEVA LÓGICA AJAX PARA FORMSPREE ---
+        // Esto envía los datos sin salir de la página
+        const contactForm = document.getElementById('contactForm');
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = this.querySelector('button');
             const originalText = btn.innerText;
-            const formData = new FormData(event.target);
+            const formData = new FormData(this);
             
             btn.innerText = "Enviando...";
             btn.disabled = true;
@@ -947,8 +948,8 @@
                         <div style="text-align: center; padding: 40px; animation: fadeInUp 0.6s;">
                             <i class="fa-solid fa-circle-check" style="font-size: 5rem; color: var(--verde-wa); margin-bottom: 20px;"></i>
                             <h3 style="font-family: 'Lexend'; color: var(--azul-deep); margin-bottom: 15px;">¡Mensaje Enviado!</h3>
-                            <p style="color: var(--text-main);">Gracias por contactar a SGH. Hemos recibido tus datos y un asesor experto te contactará vía WhatsApp.</p>
-                            <button onclick="location.reload()" class="btn-shimmer" style="margin-top: 25px; padding: 1rem 2rem;">Enviar otro</button>
+                            <p style="color: var(--text-main);">Gracias por contactar a SGH. Un asesor se comunicará contigo vía WhatsApp a la brevedad.</p>
+                            <button onclick="location.reload()" class="btn-shimmer" style="margin-top: 25px; padding: 1rem 2rem;">Volver</button>
                         </div>`;
                 } else {
                     throw new Error();
@@ -958,8 +959,7 @@
                 btn.innerText = originalText;
                 btn.disabled = false;
             }
-        }
-        form.addEventListener("submit", handleFormSubmit);
+        });
 
         // PANEL DE DETALLES OPCIONES
         function toggleDetails(tipo) {
@@ -1042,33 +1042,16 @@
                 let response = "";
                 if (userText.includes("numero") || userText.includes("contacto") || userText.includes("whatsapp") || userText.includes("telefono")) {
                     response = "Nuestro número corporativo es el <b>+56 9 7590 4243</b>. Puedes escribirnos directamente haciendo clic en el icono verde de abajo.";
-                } 
-                else if (userText.includes("como estas") || userText.includes("que tal") || userText.includes("como va todo")) {
+                } else if (userText.includes("como estas") || userText.includes("que tal") || userText.includes("como va todo")) {
                     response = "¡Estoy excelente! Muy motivado por ayudarte a gestionar tu vivienda propia. ¿Y tú cómo te encuentras hoy?";
-                }
-                else if (userText.includes("quien eres") || userText.includes("que eres") || userText.includes("tu nombre")) {
+                } else if (userText.includes("quien eres") || userText.includes("que eres") || userText.includes("tu nombre")) {
                     response = "Soy el asistente virtual de SGH - Centro de Gestión Hipotecaria. Mi labor es orientarte en los primeros pasos para tu crédito.";
-                }
-                else if (userText.includes("hora") || userText.includes("que hora es")) {
+                } else if (userText.includes("hora") || userText.includes("que hora es")) {
                     const ahora = new Date();
                     response = "En este momento son las " + ahora.getHours() + ":" + ahora.getMinutes().toString().padStart(2, '0') + ". Recuerda que nuestro horario de oficina es de Lunes a Viernes de 09:00 a 18:30.";
-                }
-                else if (userText.includes("rut") || userText.includes("datos legales") || userText.includes("empresa")) {
-                    response = "Para obtener datos legales o el RUT de la empresa, por favor comunícate directamente con gerencia vía WhatsApp por motivos de seguridad.";
-                } 
-                else if (userText.includes("hola") || userText.includes("buenos dias") || userText.includes("buenas tardes")) {
+                } else if (userText.includes("hola") || userText.includes("buenos dias") || userText.includes("buenas tardes")) {
                     response = "¡Hola! Qué gusto saludarte. Soy el asistente de SGH. ¿En qué puedo apoyarte hoy con respecto a tu futura vivienda?";
-                }
-                else if (userText.includes("requisito") || userText.includes("necesito") || userText.includes("evaluacion")) {
-                    response = "Los requisitos base son: 6 meses de antigüedad laboral y renta líquida desde $650.000. ¿Cumples con este perfil inicial?";
-                }
-                else if (userText.includes("donde") || userText.includes("ubicacion") || userText.includes("oficina") || userText.includes("providencia")) {
-                    response = "Nuestra oficina central está en Providencia, Santiago. Sin embargo, asesoramos a clientes de todo Chile de forma digital.";
-                }
-                else if (userText.includes("gracias") || userText.includes("vale") || userText.includes("ok")) {
-                    response = "¡De nada! Es un placer ayudarte. Si tienes más dudas, aquí estaré. ¡Éxito en tu proyecto!";
-                }
-                else {
+                } else {
                     response = "Esa es una excelente consulta. Para darte la información técnica exacta, por favor <b>haz clic en el botón de WhatsApp</b> para hablar con una ejecutiva de SGH. ¡Te responderemos de inmediato!";
                 }
                 const aiBubble = document.createElement('div');
