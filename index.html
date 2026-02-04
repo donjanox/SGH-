@@ -8,8 +8,9 @@
     <link rel="icon" type="image/png" href="logo.png">
     
     <meta name="description" content="Especialistas en asesoría de créditos hipotecarios y leasing habitacional en Chile. Financiamos hasta el 100%. Ubicados en Holanda 099, Providencia.">
-    <meta name="keywords" content="crédito hipotecario, leasing habitacional, subsidios vivienda, gestion hipotecaria chile, sgh providencia">
+    <meta name="keywords" content="crédito hipotecario, leasing habitacional, subsidios vivienda, gestion hipotecaria chile, sgh providencia, mutuo hipotecario, leasing vivienda">
     <meta name="author" content="SGH Centro de Gestión Hipotecaria">
+    <link rel="canonical" href="https://www.gestionsgh.cl/">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lexend:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -699,7 +700,7 @@
             <i class="fa-solid fa-building floating-home-icon f-apt-1"></i>
 
             <div class="testi-carousel-window">
-                <button class="nav-arrow testi-arrow arrow-prev" onclick="moveTesti(-1)"><i class="fas fa-chevron-left"></i></button>
+                <button class="nav-arrow testi-arrow testi-prev" onclick="moveTesti(-1)"><i class="fas fa-chevron-left"></i></button>
                 <div class="testi-grid" id="testi-carousel">
                     
                     <div class="testi-card-video" onclick="playTestimonial(this)">
@@ -719,7 +720,7 @@
                     </div>
 
                 </div>
-                <button class="nav-arrow testi-arrow arrow-next" onclick="moveTesti(1)"><i class="fas fa-chevron-right"></i></button>
+                <button class="nav-arrow testi-arrow testi-next" onclick="moveTesti(1)"><i class="fas fa-chevron-right"></i></button>
             </div>
         </div>
     </section>
@@ -823,7 +824,7 @@
             </div>
         </div>
         <div class="map-container reveal">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.876790757262!2d-70.6046022234552!3d-33.42167197339243!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662cf692429447d%3A0x72a715f530ec163!2sHolanda%2099%2C%20Providencia%2C%20Regi%C3%B3n%20Metropolitana!5e0!3m2!1ses-419!2scl!4v1700000000000!5m2!1ses-419!2scl" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.82902640286!2d-70.6053!3d-33.4215!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662cf6d6a6d6a6d%3A0x0!2sHolanda%20099%2C%20Providencia%2C%20Regi%C3%B3n%20Metropolitana!5e0!3m2!1ses-419!2scl!4v123456789" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </div>
     </section>
 
@@ -881,12 +882,14 @@
         window.addEventListener('load', () => {
             setTimeout(() => {
                 const preloader = document.getElementById('preloader');
-                preloader.style.opacity = '0';
-                setTimeout(() => {
-                    preloader.style.visibility = 'hidden';
-                    document.body.style.overflow = 'auto';
-                }, 800);
-            }, 3000); 
+                if(preloader) {
+                    preloader.style.opacity = '0';
+                    setTimeout(() => {
+                        preloader.style.visibility = 'hidden';
+                        document.body.style.overflow = 'auto';
+                    }, 800);
+                }
+            }, 2000); 
         });
 
         // REPRODUCCIÓN PERSONALIZADA
@@ -905,7 +908,8 @@
         let currentOffset = 0;
         const carousel = document.getElementById('carousel');
         function moveSlide(dir) {
-            const winWidth = document.querySelector('.carousel-window').offsetWidth;
+            const windowEl = document.querySelector('.carousel-window');
+            const winWidth = windowEl.offsetWidth;
             const cardWidth = 320 + 24; 
             const maxScroll = carousel.scrollWidth - winWidth;
             currentOffset += dir * cardWidth;
@@ -918,7 +922,8 @@
         let testiOffset = 0;
         const testiCarousel = document.getElementById('testi-carousel');
         function moveTesti(dir) {
-            const winWidth = document.querySelector('.testi-carousel-window').offsetWidth;
+            const windowEl = document.querySelector('.testi-carousel-window');
+            const winWidth = windowEl.offsetWidth;
             const cards = testiCarousel.querySelectorAll('.testi-card-video, .testi-card-text');
             if (cards.length === 0) return;
             const cardWidth = cards[0].offsetWidth + 32; 
@@ -932,13 +937,6 @@
         // --- LÓGICA AJAX PARA GOOGLE APPS SCRIPT ---
         const originalFormHTML = document.getElementById('form-inner-container').innerHTML;
 
-        function resetFormUI() {
-            const container = document.getElementById('form-inner-container');
-            container.innerHTML = originalFormHTML;
-            const newForm = document.getElementById('contactForm');
-            newForm.addEventListener('submit', handleFormSubmit);
-        }
-
         async function handleFormSubmit(e) {
             e.preventDefault();
             const btn = e.target.querySelector('button');
@@ -949,7 +947,6 @@
             btn.disabled = true;
 
             try {
-                // TU URL PERSONAL DE GOOGLE
                 const scriptURL = "https://script.google.com/macros/s/AKfycbx1MqsqrpDgSD8FGR2o-f-MuXpH8O4dJ4YM5yOCWmzqWhed4hVouO0wgZRbUOeRXqqZ/exec";
 
                 await fetch(scriptURL, {
@@ -958,7 +955,6 @@
                     mode: 'no-cors'
                 });
 
-                // Notificamos éxito aunque Google devuelva CORS opaco
                 const formContainer = document.getElementById("form-inner-container");
                 formContainer.innerHTML = `
                     <div style="text-align: center; padding: 40px; animation: fadeInUp 0.6s;">
@@ -984,37 +980,22 @@
             const data = {
                 's1': { 
                     t: 'Leasing habitacional', 
-                    d: '<p>Es crédito a un plazo máximo de 20 años en donde la escritura figura la institución financiera y el cliente como prominente comprador arrendatario, una vez que cancele la última cuota debe hacer el alzamiento y la propiedad pasa por completo a su nombre. A su vez tiene un beneficio del subsidio automático.</p>', 
+                    d: '<p>Es crédito a un plazo máximo de 20 años en donde la escritura figura la institución financiera y el cliente como prominente comprador arrendatario. Una vez que cancele la última cuota debe hacer el alzamiento y la propiedad pasa por completo a su nombre. Tiene beneficio de subsidio automático.</p>', 
                     i: 'casa1.jpg' 
                 },
                 's2': { 
                     t: 'Mutuo hipotecario', 
-                    d: '<p>Un crédito mutuo hipotecario es un préstamo a largo o corto plazo que una persona o empresa solicita para comprar una vivienda.</p>' +
-                        '<p>La propiedad queda en garantía del préstamo, lo que significa que el inmueble respalda el pago del crédito, una vez finalizada la última cuota se realiza el alzamiento.</p>' +
-                        '<h4>¿Cómo funciona?</h4>' +
-                        '<ul>' +
-                        '<li>El banco o institución financiera entrega el dinero.</li>' +
-                        '<li>El cliente paga en cuotas mensuales durante varios años (15, 20 o hasta 30 años).</li>' +
-                        '<li>Cada cuota incluye: Parte del capital (el dinero prestado) e intereses.</li>' +
-                        '<li>Mientras se paga el crédito, la propiedad queda hipotecada.</li>' +
-                        '<li>Cuando se termina de pagar, la propiedad queda 100% a nombre del dueño, sin deuda.</li>' +
-                        '</ul>', 
+                    d: '<p>Préstamo para compra de vivienda respaldado por la propiedad. El banco entrega el capital y el cliente paga cuotas (15 a 30 años) que incluyen capital e intereses. Al finalizar, la propiedad queda 100% a su nombre.</p>', 
                     i: 'casa2.jpg' 
                 },
                 's3': { 
                     t: 'Proyectos con subsidios', 
-                    d: '<p>En SGH realizamos postulaciones y gestión completa de proyectos con subsidios adjudicados, acompañando al cliente en todo el proceso legal y bancario.</p>', 
+                    d: '<p>Gestión completa de postulaciones a subsidios habitacionales, acompañando todo el proceso legal y bancario.</p>', 
                     i: 'casa3.jpg' 
                 },
                 's4': { 
                     t: '¿Quiénes pueden postular?', 
-                    d: '<h4>Requisitos clave para tu evaluación:</h4>' +
-                        '<div class="requisitos-grid">' +
-                            '<div class="requisito-item animate__animated animate__fadeInUp"><i class="fa-solid fa-calendar-check"></i><span>6 meses de antigüedad laboral</span></div>' +
-                            '<div class="requisito-item animate__animated animate__fadeInUp" style="animation-delay: 0.1s;"><i class="fa-solid fa-piggy-bank"></i><span>Sin ahorro previo obligatorio</span></div>' +
-                            '<div class="requisito-item animate__animated animate__fadeInUp" style="animation-delay: 0.2s;"><i class="fa-solid fa-passport"></i><span>Chilenos y Extranjeros (Definitiva)</span></div>' +
-                            '<div class="requisito-item animate__animated animate__fadeInUp" style="animation-delay: 0.3s;"><i class="fa-solid fa-money-bill-trend-up"></i><span>Renta desde $650.000 líquidos</span></div>' +
-                        '</div>', 
+                    d: '<h4>Requisitos clave:</h4><div class="requisitos-grid"><div class="requisito-item"><i class="fa-solid fa-calendar-check"></i><span>6 meses antigüedad</span></div><div class="requisito-item"><i class="fa-solid fa-piggy-bank"></i><span>Sin ahorro previo</span></div><div class="requisito-item"><i class="fa-solid fa-passport"></i><span>Chilenos y Extranjeros</span></div><div class="requisito-item"><i class="fa-solid fa-money-bill-trend-up"></i><span>Renta $650k+</span></div></div>', 
                     i: 'casa1.jpg' 
                 }
             };
@@ -1046,30 +1027,26 @@
             const box = document.getElementById('chat-box');
             const typing = document.getElementById('typing-indicator');
             if(!input.value.trim()) return;
-            const userText = input.value.toLowerCase().trim();
+            
             const userBubble = document.createElement('div');
             userBubble.className = 'chat-bubble user';
             userBubble.innerText = input.value;
             box.insertBefore(userBubble, typing);
+            
+            const userText = input.value.toLowerCase();
             input.value = '';
             box.scrollTop = box.scrollHeight;
             typing.style.display = 'block';
+
             setTimeout(() => {
                 typing.style.display = 'none';
                 let response = "";
-                if (userText.includes("numero") || userText.includes("contacto") || userText.includes("whatsapp") || userText.includes("telefono")) {
-                    response = "Nuestro número corporativo es el <b>+56 9 7590 4243</b>. Puedes escribirnos directamente haciendo clic en el icono verde de abajo.";
-                } else if (userText.includes("como estas") || userText.includes("que tal") || userText.includes("como va todo")) {
-                    response = "¡Estoy excelente! Muy motivado por ayudarte a gestionar tu vivienda propia. ¿Y tú cómo te encuentras hoy?";
-                } else if (userText.includes("quien eres") || userText.includes("que eres") || userText.includes("tu nombre")) {
-                    response = "Soy el asistente virtual de SGH - Centro de Gestión Hipotecaria. Mi labor es orientarte en los primeros pasos para tu crédito.";
-                } else if (userText.includes("hora") || userText.includes("que hora es")) {
-                    const ahora = new Date();
-                    response = "En este momento son las " + ahora.getHours() + ":" + ahora.getMinutes().toString().padStart(2, '0') + ". Recuerda que nuestro horario de oficina es de Lunes a Viernes de 09:00 a 18:30.";
-                } else if (userText.includes("hola") || userText.includes("buenos dias") || userText.includes("buenas tardes")) {
-                    response = "¡Hola! Qué gusto saludarte. Soy el asistente de SGH. ¿En qué puedo apoyarte hoy con respecto a tu futura vivienda?";
+                if (userText.includes("numero") || userText.includes("contacto") || userText.includes("whatsapp")) {
+                    response = "Nuestro WhatsApp es <b>+56 9 7590 4243</b>.";
+                } else if (userText.includes("hola")) {
+                    response = "¡Hola! Soy el asistente de SGH. ¿En qué te ayudo?";
                 } else {
-                    response = "Esa es una excelente consulta. Para darte la información técnica exacta, por favor <b>haz clic en el botón de WhatsApp</b> para hablar con una ejecutiva de SGH. ¡Te responderemos de inmediato!";
+                    response = "Para asesoría detallada, presiona el botón de <b>WhatsApp</b>.";
                 }
                 const aiBubble = document.createElement('div');
                 aiBubble.className = 'chat-bubble ai';
@@ -1079,26 +1056,23 @@
             }, 1000); 
         }
 
-        // ANIMACIÓN SECUENCIAL PASOS
-        const stepsObserverOptions = { threshold: 0.25 };
+        // ANIMACIÓN PASOS
         const stepsObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    const steps = entry.target.querySelectorAll('.step-card');
-                    steps.forEach((step, index) => {
-                        setTimeout(() => { step.classList.add('animate-steps'); }, index * 250);
+                    entry.target.querySelectorAll('.step-card').forEach((step, i) => {
+                        setTimeout(() => step.classList.add('animate-steps'), i * 250);
                     });
-                    stepsObserver.unobserve(entry.target); 
                 }
             });
-        }, stepsObserverOptions);
+        }, { threshold: 0.25 });
         stepsObserver.observe(document.getElementById('steps-animation-trigger'));
 
         // REVEAL ANIMATIONS
-        const observer = new IntersectionObserver((entries) => {
+        const revealObserver = new IntersectionObserver((entries) => {
             entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('show'); });
         }, { threshold: 0.1 });
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
     </script>
 </body>
 </html>
